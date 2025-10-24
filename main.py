@@ -9,6 +9,8 @@ nltk.download('punkt_tab')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+
+""" --- BASIC TEXT PIPELINE ---"""
 def basic_text_pipeline(user_input):
     """
     Implements the five steps of the basic text preprocessing pipeline:
@@ -59,3 +61,71 @@ processed_result = basic_text_pipeline(example_command)
 print("\n--- Final Output ---")
 print(f"Final Tokens for Command Parsing: {processed_result}")
 print("\n The output is a list of root words ready for command interpretation")
+
+
+""" --- DEFINING ROBOT COMMAND STRUCTURE --- """
+# Define Standardized Robot Actions and their valid Directional modifiers
+# Key is the standard, executable command (e.g., 'move')
+# Values are the valid modifiers (Directions) for that command
+STANDARD_ROBOT_ACTIONS = {
+
+    'move': {
+        'valid_directions': ['forward', 'backward', 'left', 'right'],
+        'description': 'Translates the robot in a linear direction.'
+    },
+    'rotate': {
+        'valid_directions': ['left', 'right', 'clockwise', 'counter_clockwise'],
+        'description': 'Rotates the robot by a specified angle.'
+    },
+    'stop': {
+        'valid_directions': [],  # Stop usually requires no direction
+        'description': 'Immediately halts all robot movement.'
+    },
+    # Add other core actions like 'grab', 'release' if needed
+}
+
+# Define Standardized Parameter Types and Units.
+# This structure helps identify the numeric values and their corresponding units
+# Key is the type of parameter required
+STANDARD_ROBOT_PARAMETERS = {
+    'distance': {
+        'required': True,
+        'valid_units': ['cm', 'meter', 'm', 'millimeter', 'mm'],
+        'data_type': 'float'
+    },
+    'angle': {
+        'required': True,
+        'valid_units': ['degrees', 'radians'],
+        'data_type': 'float'
+    },
+    'speed': {
+        'required': False,
+        'valid_units': ['percent', 'low', 'medium', 'high'],
+        'data_type': 'mixed'
+    },
+}
+
+# Combine the structures into a single configuration dictionary (Optional but useful)
+ROBOT_COMMAND_GROUND_TRUTH = {
+    'actions': STANDARD_ROBOT_ACTIONS,
+    'parameters': STANDARD_ROBOT_PARAMETERS
+}
+
+
+""" CREATION OF FUNCTION TO INSPECT THE USAGE OF ROBOT ACTIONS AND PARAMETERS """
+def inspect_command_structure():
+    """Prints the defined command structure for verification."""
+    print("--- Robot Command Ground Truth Structure ---")
+
+    # 1: Accessing an Action's valid directions
+    move_directions = ROBOT_COMMAND_GROUND_TRUTH['actions']['move']['valid_directions']
+    print(f"\nStandard Action 'move' accepts directions: {move_directions}")
+    # Similar cases can be checked for rotation etc.
+
+    # 2: Accessing Parameter Units
+    distance_units = ROBOT_COMMAND_GROUND_TRUTH['parameters']['distance']['valid_units']
+    print(f"Distance parameters accepts units: {distance_units}")
+    # Similar cases can be checked for angle etc.
+
+# Execute the inspection function
+inspect_command_structure()
